@@ -144,11 +144,12 @@ for i in range(1,151):
         <style>
         body {
             text-align: left;
-            width: 60%;
+            width: 50%;
             margin: auto;
         }
         </style>
-        <title>Problem  '''+str(i)+'''</title>
+        <title>Problem  ''' + str(i) + '''</title>
+        <a href="../index.html" style="position : fixed;top:0px;left:0px;font-size:35px;text-decoration: none;color:grey;">回到主页</a>
         </head>
         </html>
     '''
