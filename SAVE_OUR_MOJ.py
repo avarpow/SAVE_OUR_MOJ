@@ -52,7 +52,7 @@ for i in range(1,151):
     f = open("submissions/"+str(i)+".json",'w',encoding='utf-8')
     f.write(s.text)
     f.close()
-    time.sleep(0.05)
+    time.sleep(0.02)
     print('提交'+str(i)+' 获取完成')
 print("提交获取完成")
 if os.path.isdir('problems'):
@@ -64,7 +64,7 @@ for i in range(1,151):
     f = open("problems/"+str(i)+".json",'w',encoding='utf-8')
     f.write(s.text)
     f.close()
-    time.sleep(0.05)
+    time.sleep(0.02)
     print('问题'+str(i)+' 获取完成')
 print("全部问题获取完成")
 submission_ids = []
@@ -85,7 +85,7 @@ for i in submission_ids:
      f = open("codes/"+str(i)+".json",'w',encoding='utf-8')
      f.write(s.text)
      f.close()
-     time.sleep(0.05)
+     time.sleep(0.02)
      print('提交'+str(i)+' 获取完成')
 print("代码获取完成")   
 #生成主页
@@ -99,7 +99,11 @@ f.write(
     <title>mirrors of moj</title>
     <style>
     body {
-        text-align: center;
+        text-align: left;
+        margin-left: 35%;
+    }
+    .problem {
+        text-decoration: none;
     }
     </style>
 </head>
@@ -108,7 +112,13 @@ f.write(
     '''
 )
 for i in range(1, 151):
-    s="<div><a href=\"pages/"+str(i)+".html\">Problem "+str(i)+"</a></div>\n"
+    title_t  = open('problems/' + str(i) + '.json', 'r', encoding='utf-8')
+    titlejs_t = json.load(title_t)
+    titlejs_data = titlejs_t['data']
+    title = titlejs_data[0]['title']
+    title_raw =title.strip("\'")
+
+    s="<div><a href=\"pages/"+str(i)+".html\" class=\"problem\">Problem "+str(i)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+title_raw+"</a></div>\n"
     f.write(s)
 f.write(
 '''</body>
@@ -144,7 +154,8 @@ for i in range(1,151):
     '''
     body_start = '''
         <body>
-        <h1>Problem  '''+str(i)+'''</h1>
+        <h1>Problem  ''' + str(i) + '''</h1>
+        <h2 id="title"></h2>
         <div id="description"></div>
         <div>你的提交</div>
     '''
@@ -152,7 +163,14 @@ for i in range(1,151):
     discriptionjs_t = json.load(discription_t)
     discriptionjs_data = discriptionjs_t['data']
     discription = discriptionjs_data[0]['description']
-    discription_script="$('#description')[0].innerHTML= marked(" + repr(discription) + ");\n"
+    discription_script = "$('#description')[0].innerHTML= marked(" + repr(discription) + ");\n"
+    
+    title_t  = open('problems/' + str(i) + '.json', 'r', encoding='utf-8')
+    titlejs_t = json.load(title_t)
+    titlejs_data = titlejs_t['data']
+    title = titlejs_data[0]['title']
+    title_script = "$('#title')[0].innerHTML= " + repr(title) + ";\n"
+    
     submission_ids = []
     code_raws = []
     code_grades=[]
@@ -178,7 +196,7 @@ for i in range(1,151):
         code_mid = code_mid + "$('#code" + str(j) + "')[0].innerHTML='<pre><code>" + (repr(code_raws[j].replace('<', '&lt;').replace('>', '&gt;')))[1:-1] + " </pre></code>\';\n"
         code_mid=code_mid+"$('#code_grade" + str(j) + "')[0].innerHTML= '你以上代码的得分：" + str(code_grades[j]) + "';\n"
     code_end = "}\n</script>"
-    code_script = code_start + code_mid + discription_script + code_end
+    code_script = code_start + code_mid + discription_script + title_script + code_end
     body_mid=""
     for j in range(0, len(code_raws)):
         body_mid = body_mid + "<div id='code" + str(j) + "'></div>\n"
