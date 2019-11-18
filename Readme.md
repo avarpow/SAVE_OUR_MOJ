@@ -14,3 +14,4 @@ v0.0.2  主页和详情页面添加了题目的名称
 如果需要更新状态请重新运行本程序
 
 题目详情参考界面->[点击进入](https://avarpow.github.io/SAVE_OUR_MOJ/21.html)
+主页参考界面->[点击进入](https://avarpow.github.io/SAVE_OUR_MOJ_INDEX/)
